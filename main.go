@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"flag"
+	"net/http"
+	"io/ioutil"
 )
 
 func main() {
@@ -22,5 +24,17 @@ func main() {
 }
 
 func makeHTTPRequest(url string) {
-	fmt.Println("URL: ", url)
+	resp, err := http.Get("http://127.0.0.1:8787/links")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("err", err)
+	}
+
+	fmt.Println(string(body))
 }
